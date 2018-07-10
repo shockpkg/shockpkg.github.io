@@ -9,6 +9,7 @@ cache:
     - "node_modules"
 
 script:
+  - yarn run lint
   - yarn run build
 
 deploy:
@@ -20,4 +21,3 @@ deploy:
   github-token: $GITHUB_TOKEN
   on:
     branch: dev
-

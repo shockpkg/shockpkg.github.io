@@ -1,0 +1,9 @@
+$color-primary: #333;
+$color-bg: #CCC;
+
+body {
+	background: $color-bg;
+	color: $color-primary;
+	max-width: 80%;
+	margin: 0 auto;
+}

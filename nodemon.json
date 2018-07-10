@@ -1,0 +1,6 @@
+{
+	"ignore": [
+		"dist/*"
+	],
+	"ext": "js mjs jsx mjsx ts tsx php pug css less scss sass"
+}
