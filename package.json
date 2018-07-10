@@ -1,0 +1,7 @@
+{
+	"private": true,
+	"scripts": {
+		"build": "mkdir dist; echo 'test' > dist/index.html"
+	},
+	"devDependencies": {}
+}
