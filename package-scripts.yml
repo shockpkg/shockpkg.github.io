@@ -11,10 +11,9 @@ scripts:
     dist: rimraf "dist"
 
   build:
-    default: concurrently "nps build.tpl" "nps build.res" "nps build.api"
+    default: concurrently "nps build.tpl" "nps build.res"
     tpl: gulp tpl
     res: gulp res
-    api: gulp api
 
   watch:
     default: nodemon --exec 'nps clean lint.watch build'

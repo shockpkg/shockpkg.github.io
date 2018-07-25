@@ -3,8 +3,6 @@ import util from 'util';
 
 import fse from 'fs-extra';
 import glob from 'glob';
-import request from 'request';
-import yaml from 'js-yaml';
 import supportsColors from 'supports-color';
 import pug from 'pug';
 import pump from 'pump';
@@ -23,22 +21,6 @@ const globP = util.promisify(glob);
 
 const dist = 'dist';
 const distAbs = path.resolve('./dist');
-
-async function req(options) {
-	const r = await new Promise((resolve, reject) => {
-		request(options, (error, response, body) => {
-			if (error) {
-				reject(error);
-				return;
-			}
-			resolve({
-				response,
-				body
-			});
-		});
-	});
-	return r;
-}
 
 async function babelrc() {
 	babelrc.json = babelrc.json ||
@@ -223,37 +205,4 @@ export async function tpl() {
 
 export async function res() {
 	await webpackTarget(process.NODE_ENV !== 'development');
-}
-
-export async function api() {
-	const apiDir = path.join(dist, 'api');
-	await fse.mkdirp(apiDir);
-
-	const {response, body} = await req({
-		url: 'https://raw.githubusercontent.com/flpkg/packages/master/packages.yaml'
-	});
-
-	if (response.statusCode !== 200) {
-		throw new Error(`Unexpected status code: ${response.statusCode}`);
-	}
-
-	const doc = yaml.safeLoad(body);
-	if (doc.format !== '1.0') {
-		throw new Error(`Unexpected document format: ${doc.format}`);
-	}
-
-	const pathJSON = path.join(apiDir, 'packages.json');
-	const pathYAML = path.join(apiDir, 'packages.yaml');
-
-	const codeJSON = JSON.stringify(doc);
-	const codeYAML = yaml.safeDump(doc, {
-		lineWidth: 1000000,
-		noRefs: true,
-		indent: 2
-	});
-
-	await Promise.all([
-		fse.writeFile(pathJSON, codeJSON),
-		fse.writeFile(pathYAML, codeYAML)
-	]);
 }

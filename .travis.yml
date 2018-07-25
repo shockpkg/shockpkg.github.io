@@ -9,6 +9,7 @@ cache:
     - "node_modules"
 
 script:
+  - yarn run clean
   - yarn run lint
   - yarn run build
 
