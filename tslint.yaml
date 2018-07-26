@@ -7,7 +7,6 @@ defaultSeverity: error
 linterOptions:
   exclude:
   - lib
-  - docker
 
 rulesDirectory:
 
