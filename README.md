@@ -1,5 +1,5 @@
-# flpkg.github.io
+# shockpkg.github.io
 
-The website for flpkg.
+The website for shockpkg.
 
-[![Build Status](https://travis-ci.org/flpkg/flpkg.github.io.svg?branch=dev)](https://travis-ci.org/flpkg/flpkg.github.io)
+[![Build Status](https://travis-ci.org/shockpkg/shockpkg.github.io.svg?branch=dev)](https://travis-ci.org/shockpkg/shockpkg.github.io)
