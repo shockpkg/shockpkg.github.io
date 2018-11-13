@@ -15,8 +15,8 @@ yarn-debug.log*
 yarn-error.log*
 *.tgz
 
-# Using Yarn
-package-lock.json
+# Using NPM
+yarn.lock
 
 # Build files
 /dist

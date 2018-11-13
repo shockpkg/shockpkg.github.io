@@ -1,17 +1,16 @@
 language: node_js
 
 node_js:
-  - "v10.6.0"
+  - "v11.1.0"
 
 cache:
-  yarn: true
   directories:
     - "node_modules"
 
 script:
-  - yarn run clean
-  - yarn run lint
-  - yarn run build
+  - npm run clean
+  - npm run lint
+  - npm run build
 
 deploy:
   provider: pages
@@ -22,3 +21,4 @@ deploy:
   github-token: $GITHUB_TOKEN
   on:
     branch: dev
+    condition: $TRAVIS_EVENT_TYPE != cron
