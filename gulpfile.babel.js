@@ -1,11 +1,11 @@
 import path from 'path';
 import util from 'util';
+import stream from 'stream';
 
 import fse from 'fs-extra';
 import glob from 'glob';
 import supportsColors from 'supports-color';
 import pug from 'pug';
-import pump from 'pump';
 import browserslist from 'browserslist';
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
@@ -15,21 +15,27 @@ import postcssPresetEnv from 'postcss-preset-env';
 import gulp from 'gulp';
 import gulpPug from 'gulp-pug';
 import gulpRename from 'gulp-rename';
+import execa from 'execa';
+import del from 'del';
 
-const pumpP = util.promisify(pump);
+const pipeline = util.promisify(stream.pipeline);
 const globP = util.promisify(glob);
 
 const dist = 'dist';
 const distAbs = path.resolve('./dist');
 
-async function babelrc() {
-	babelrc.json = babelrc.json ||
-		fse.readFile('.babelrc', 'utf8');
-	const r = JSON.parse(await babelrc.json);
+async function exec(cmd, args = []) {
+	await execa(cmd, args, {
+		preferLocal: true,
+		stdio: 'inherit'
+	});
+}
 
-	// Prevent .babelrc file from being loaded again by the plugin.
-	r.babelrc = false;
-	return r;
+async function babelrc() {
+	babelrc.json = babelrc.json || fse.readFile('.babelrc', 'utf8');
+	return Object.assign(JSON.parse(await babelrc.json), {
+		babelrc: false
+	});
 }
 
 function babelrcGetEnv(opts) {
@@ -188,8 +194,83 @@ async function webpackTarget(min) {
 	});
 }
 
-export async function tpl() {
-	await pumpP([
+async function eslint(strict) {
+	try {
+		await exec('eslint', ['.']);
+	}
+	catch (err) {
+		if (strict) {
+			throw err;
+		}
+	}
+}
+
+async function tslint(strict) {
+	try {
+		await exec('tslint', ['-p', '.', '-t', 'stylish']);
+	}
+	catch (err) {
+		if (strict) {
+			throw err;
+		}
+	}
+}
+
+// clean
+
+gulp.task('clean:logs', async () => {
+	await del([
+		'npm-debug.log*',
+		'yarn-debug.log*',
+		'yarn-error.log*'
+	]);
+});
+
+gulp.task('clean:dist', async () => {
+	await del([
+		'dist'
+	]);
+});
+
+gulp.task('clean', gulp.parallel([
+	'clean:logs',
+	'clean:dist'
+]));
+
+// lint (watch)
+
+gulp.task('lintw:js', async () => {
+	await eslint(false);
+});
+
+gulp.task('lintw:ts', async () => {
+	await tslint(false);
+});
+
+gulp.task('lintw', gulp.parallel([
+	'lintw:js',
+	'lintw:ts'
+]));
+
+// lint
+
+gulp.task('lint:js', async () => {
+	await eslint(true);
+});
+
+gulp.task('lint:ts', async () => {
+	await tslint(true);
+});
+
+gulp.task('lint', gulp.parallel([
+	'lint:js',
+	'lint:ts'
+]));
+
+// build
+
+gulp.task('build:tpl', async () => {
+	await pipeline([
 		gulp.src([
 			'tpl/**/*.pug'
 		]),
@@ -201,8 +282,29 @@ export async function tpl() {
 		}),
 		gulp.dest(dist)
 	]);
-}
+});
 
-export async function res() {
+gulp.task('build:res', async () => {
 	await webpackTarget(process.NODE_ENV !== 'development');
-}
+});
+
+gulp.task('build', gulp.parallel([
+	'build:tpl',
+	'build:res'
+]));
+
+// all
+
+gulp.task('all', gulp.series([
+	'clean',
+	'lint',
+	'build'
+]));
+
+// watched
+
+gulp.task('watched', gulp.series([
+	'clean',
+	'lintw',
+	'build'
+]));
