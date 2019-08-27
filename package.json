@@ -16,11 +16,16 @@
 		"@babel/preset-typescript": "^7.3.3",
 		"@babel/register": "^7.5.5",
 		"@babel/runtime": "^7.5.5",
+		"@typescript-eslint/eslint-plugin": "^2.0.0",
+		"@typescript-eslint/parser": "^2.0.0",
 		"autoprefixer": "^9.6.1",
 		"babel-loader": "^8.0.6",
+		"browserslist": "^4.6.6",
 		"css-loader": "^3.2.0",
 		"del": "^5.1.0",
 		"eslint": "^6.2.2",
+		"eslint-plugin-import": "^2.18.2",
+		"eslint-plugin-jsdoc": "^15.8.3",
 		"execa": "^2.0.4",
 		"fs-extra": "^8.1.0",
 		"glob": "^7.1.4",
@@ -38,12 +43,10 @@
 		"pug": "^2.0.4",
 		"sass-loader": "^7.3.1",
 		"supports-color": "^7.0.0",
-		"tslint": "^5.19.0",
-		"tslint-consistent-codestyle": "^1.15.1",
-		"tslint-eslint-rules": "^5.4.0",
 		"typescript": "^3.5.3",
 		"uglifyjs-webpack-plugin": "^2.2.0",
 		"webpack": "^4.39.2",
 		"webpack-cli": "^3.3.7"
-	}
+	},
+	"dependencies": {}
 }

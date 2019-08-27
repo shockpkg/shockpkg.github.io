@@ -1,3 +1,5 @@
+/* eslint-disable jsdoc/require-jsdoc */
+
 import path from 'path';
 import util from 'util';
 import stream from 'stream';
@@ -196,18 +198,7 @@ async function webpackTarget(min) {
 
 async function eslint(strict) {
 	try {
-		await exec('eslint', ['.']);
-	}
-	catch (err) {
-		if (strict) {
-			throw err;
-		}
-	}
-}
-
-async function tslint(strict) {
-	try {
-		await exec('tslint', ['-p', '.', '-t', 'stylish']);
+		await exec('eslint', ['--ext', 'js,mjs,jsx,mjsx,ts,tsx', '.']);
 	}
 	catch (err) {
 		if (strict) {
@@ -239,32 +230,22 @@ gulp.task('clean', gulp.parallel([
 
 // lint (watch)
 
-gulp.task('lintw:js', async () => {
+gulp.task('lintw:es', async () => {
 	await eslint(false);
 });
 
-gulp.task('lintw:ts', async () => {
-	await tslint(false);
-});
-
 gulp.task('lintw', gulp.parallel([
-	'lintw:js',
-	'lintw:ts'
+	'lintw:es'
 ]));
 
 // lint
 
-gulp.task('lint:js', async () => {
+gulp.task('lint:es', async () => {
 	await eslint(true);
 });
 
-gulp.task('lint:ts', async () => {
-	await tslint(true);
-});
-
 gulp.task('lint', gulp.parallel([
-	'lint:js',
-	'lint:ts'
+	'lint:es'
 ]));
 
 // build
