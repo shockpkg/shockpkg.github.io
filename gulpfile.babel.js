@@ -198,7 +198,7 @@ async function webpackTarget(min) {
 
 async function eslint(strict) {
 	try {
-		await exec('eslint', ['--ext', 'js,mjs,jsx,mjsx,ts,tsx', '.']);
+		await exec('eslint', ['.']);
 	}
 	catch (err) {
 		if (strict) {
