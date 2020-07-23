@@ -11,7 +11,7 @@ import pug from 'pug';
 import browserslist from 'browserslist';
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import TerserJSPlugin from 'terser-webpack-plugin';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import postcssPresetEnv from 'postcss-preset-env';
 import gulp from 'gulp';
@@ -147,24 +147,13 @@ async function webpackTarget(min) {
 			})
 		],
 		optimization: {
+			minimize: min,
 			minimizer: [
-				min ? new UglifyJsPlugin({
-					cache: true,
-					parallel: true,
-					sourceMap: true,
-					uglifyOptions: {
-						output: {
-							comments: false
-						}
-					}
-				}) : null,
+				min ? new TerserJSPlugin({}) : null,
 				min ? new OptimizeCSSAssetsPlugin({
 					cssProcessorOptions: {
 						map: {
 							inline: false
-						},
-						discardComments: {
-							removeAll: true
 						}
 					}
 				}) : null
