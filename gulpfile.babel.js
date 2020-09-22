@@ -121,13 +121,14 @@ async function webpackTarget(min) {
 							loader: 'postcss-loader',
 							options: {
 								sourceMap: true,
-								modules: true,
-								plugins: loader => [
-									postcssPresetEnv({
-										stage: 0,
-										browsers: browserslist
-									})
-								]
+								postcssOptions: {
+									plugins: [
+										postcssPresetEnv({
+											stage: 0,
+											browsers: browserslist
+										})
+									]
+								}
 							}
 						},
 						{
